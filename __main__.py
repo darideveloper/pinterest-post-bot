@@ -1,12 +1,11 @@
 import os
-from dotenv import load_dotenv
-from logs import logger
-from scraping_manager.automate import WebScraping
 
-load_dotenv ()
-VAR = os.getenv ("VAR")
+WAIT_TIME = os.getenv ("WAIT_TIME")
 
-def main (): 
+
+
+SCRAPER = WebScraping()
+
 
 
 if __name__ == "__main__":
