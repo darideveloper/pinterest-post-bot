@@ -62,6 +62,10 @@ def create_posts(post_data: list):
             tags
         )
         
+        # Delete post image
+        os.remove(image_path)
+        
+        # Wait before next post
         sleep(WAIT_TIME_POST)
 
 
