@@ -122,6 +122,8 @@ class PinterestBot(WebScraping):
 
         selectors = {
             "input_image": '#storyboard-upload-input',
+            "input_image_errror": '[data-test-id="drag-behavior-container"] '
+                                  '[style="max-width: 220px;"]',
             "input_title": '#storyboard-selector-title',
             "input_description": '.notranslate.public-DraftEditor-content',
             "link": '#WebsiteField',
@@ -131,10 +133,16 @@ class PinterestBot(WebScraping):
         # Load page
         self.set_page(self.pages["post"])
         self.refresh_selenium()
-
+        
         # Upload image
         self.send_data(selectors["input_image"], image)
         self.refresh_selenium()
+     
+        # Detect errors uploading image
+        error = self.get_text(selectors["input_image_errror"])
+        if error:
+            logger.error(f"\tERROR: {error}")
+            return
 
         # Write text data (title, description and link)
         self.send_data(selectors["input_title"], title)
