@@ -26,6 +26,7 @@ def download_image(link: str) -> str:
     # Save image
     image_hash = secrets.token_hex(8)
     image_extension = link.split('.')[-1]
+    image_extension = image_extension.split('?')[0]
     image_path = os.path.join(images_folder, f'{image_hash}.{image_extension}')
     with open(image_path, "wb") as file:
         for chunk in res:

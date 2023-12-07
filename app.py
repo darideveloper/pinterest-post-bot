@@ -18,6 +18,22 @@ CORS(app)
 bot = PinterestBot()
 
 
+def create_posts(post_data: list):
+    """ Create each pinterest post
+
+    Args:
+        post_data (list): List of post dicts
+    """
+    
+    for post in post_data:
+        
+        # Download product image
+        post_image = post["image"]
+        image_path = download_image(post_image)
+        
+        # 
+
+
 @app.get("/")
 def index():
     return {
@@ -32,6 +48,10 @@ def create_pinterest_post():
     
     # Get json post data
     data = request.json
+    
+    # Create post in background
+    thread_obj = Thread(target=create_posts, args=(data,))
+    thread_obj.start()
     
     return {
         "status": "success",
