@@ -1,4 +1,5 @@
 import os
+from time import sleep
 from flask import Flask, request
 from dotenv import load_dotenv
 from flask_cors import CORS
@@ -9,6 +10,7 @@ from tools import download_image
 # Read settings
 load_dotenv()
 PORT = int(os.environ.get('PORT', 5001))
+WAIT_TIME_POST = int(os.environ.get('WAIT_TIME_POST', 10))
 
 # Start flask
 app = Flask(__name__)
@@ -31,7 +33,36 @@ def create_posts(post_data: list):
         post_image = post["image"]
         image_path = download_image(post_image)
         
-        # 
+        # Generate pin/post title
+        keyword = post["keyword"]
+        title = f"Price Comparison {keyword}!"
+        
+        # Generate pin description TODO: generate with ai
+        description = post["title"]
+        
+        # previee page link
+        link = post["url"].replace(
+            "http://localhost:5000",
+            "https://www.price-checker.us"
+        )
+        
+        # board name
+        board = title
+        
+        # tags list TODO: generate with ai
+        tags = ["iphone", "Smartphone"]
+        
+        # create post
+        bot.post(
+            image_path,
+            title,
+            description,
+            link,
+            board,
+            tags
+        )
+        
+        sleep(WAIT_TIME_POST)
 
 
 @app.get("/")

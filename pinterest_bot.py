@@ -118,7 +118,7 @@ class PinterestBot(WebScraping):
             tags (list): List of tags
         """
         
-        logger.info(f"Posting {title}")
+        logger.info(f"Posting {title}: {description}")
 
         selectors = {
             "input_image": '#storyboard-upload-input',
