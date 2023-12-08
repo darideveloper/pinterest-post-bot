@@ -6,6 +6,7 @@ from flask_cors import CORS
 from pinterest_bot import PinterestBot
 from threading import Thread
 from tools import download_image
+from apis.chatgpt_api import get_tags_description
 
 # Read settings
 load_dotenv()
@@ -29,6 +30,17 @@ def create_posts(post_data: list):
     
     for post in post_data:
         
+        tags, description = get_tags_description(
+            post["keyword"],
+            post["title"],
+            post["price"],
+            post["rate_num"],
+            post["reviews"],
+            post["store"],
+            post["best_seller"],
+            post["url"]
+        )
+        
         # Download product image
         post_image = post["image"]
         image_path = download_image(post_image)
@@ -36,9 +48,6 @@ def create_posts(post_data: list):
         # Generate pin/post title
         keyword = post["keyword"]
         title = f"Price Comparison {keyword}!"
-        
-        # Generate pin description TODO: generate with ai
-        description = post["title"]
         
         # previee page link
         link = post["url"].replace(
@@ -48,9 +57,6 @@ def create_posts(post_data: list):
         
         # board name
         board = title
-        
-        # tags list TODO: generate with ai
-        tags = ["iphone", "Smartphone"]
         
         # create post
         bot.post(

@@ -1,10 +1,10 @@
 import os
 from time import sleep
 from logs import logger
-from scraping.web_scraping import WebScraping
 from dotenv import load_dotenv
-load_dotenv()
+from scraping.web_scraping import WebScraping
 
+load_dotenv()
 CHROME_FOLDER = os.getenv("CHROME_FOLDER")
 WAIT_TIME = os.getenv("WAIT_TIME")
 HEADLESS = os.getenv("HEADLESS") == "True"
