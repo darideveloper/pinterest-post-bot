@@ -7,6 +7,7 @@ from pinterest_bot import PinterestBot
 from threading import Thread
 from tools import download_image
 from apis.chatgpt_api import get_tags_description
+from logs import logger
 
 # Read settings
 load_dotenv()
@@ -29,6 +30,10 @@ def create_posts(post_data: list):
     """
     
     for post in post_data:
+        
+        index = post_data.index(post) + 1
+        max_post = len(post_data)
+        logger.info(f"Posting {index} / {max_post}")
         
         tags, description = get_tags_description(
             post["keyword"],
@@ -65,7 +70,7 @@ def create_posts(post_data: list):
             description,
             link,
             board,
-            tags
+            tags,
         )
         
         # Delete post image
