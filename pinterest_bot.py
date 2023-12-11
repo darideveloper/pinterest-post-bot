@@ -3,6 +3,7 @@ from time import sleep
 from logs import logger
 from dotenv import load_dotenv
 from scraping.web_scraping import WebScraping
+from libs.canva import Canva
 
 load_dotenv()
 CHROME_FOLDER = os.getenv("CHROME_FOLDER")
@@ -24,9 +25,9 @@ class PinterestBot(WebScraping):
             chrome_folder=CHROME_FOLDER,
             start_killing=True
         )
-
-        # Validate login
-        self.__login__()
+        
+        # Connect to canva
+        self.canva = Canva(self)
 
     def __login__(self):
         """ Open browser go to pinterest and validate session """
@@ -117,6 +118,12 @@ class PinterestBot(WebScraping):
             board (str): Name of board
             tags (list): List of tags
         """
+        
+        # remove bg from image with canva
+        image = self.canva.remove_bg_image(image)
+        
+        # Validate login
+        self.__login__()
 
         selectors = {
             "input_image": '#storyboard-upload-input',
@@ -159,10 +166,10 @@ class PinterestBot(WebScraping):
         self.refresh_selenium()
 
 
-if __file__ == "__main__":
+if __name__ == "__main__":
     current_folder = os.path.dirname(__file__)
     images_folder = os.path.join(current_folder, "images")
-    file_path = os.path.join(images_folder, "sample.jpeg")
+    file_path = os.path.join(images_folder, "sample.jpg")
 
     pinterest_bot = PinterestBot()
     pinterest_bot.post(
