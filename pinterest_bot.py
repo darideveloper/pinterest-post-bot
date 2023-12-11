@@ -4,6 +4,7 @@ from logs import logger
 from dotenv import load_dotenv
 from scraping.web_scraping import WebScraping
 from libs.canva import Canva
+from libs.image_editor import crop_image
 
 load_dotenv()
 CHROME_FOLDER = os.getenv("CHROME_FOLDER")
@@ -120,6 +121,7 @@ class PinterestBot(WebScraping):
         """
         
         # remove bg from image with canva
+        crop_image(image)
         image = self.canva.remove_bg_image(image)
         
         # Validate login
@@ -169,7 +171,7 @@ class PinterestBot(WebScraping):
 if __name__ == "__main__":
     current_folder = os.path.dirname(__file__)
     images_folder = os.path.join(current_folder, "images")
-    file_path = os.path.join(images_folder, "sample.jpg")
+    file_path = os.path.join(images_folder, "sample.webp")
 
     pinterest_bot = PinterestBot()
     pinterest_bot.post(
