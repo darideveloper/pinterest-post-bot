@@ -121,6 +121,7 @@ class PinterestBot(WebScraping):
         """
         
         # remove bg from image with canva
+        logger.info("\tremoving background from image")
         crop_image(image)
         image = self.canva.remove_bg_image(image)
         
