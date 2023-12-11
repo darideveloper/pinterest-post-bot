@@ -8,6 +8,7 @@ parent_folder = os.path.dirname(current_folder)
 sys.path.append(parent_folder)
 
 from scraping.web_scraping import WebScraping
+from logs import logger
 
 
 class Canva ():
@@ -20,6 +21,18 @@ class Canva ():
             "home": "https://www.canva.com/",
         }
         self.images_folder = os.path.join(parent_folder, "images")
+    
+    def __validate_login__(self):
+        """ Validate if user is logged in """
+        
+        selectors = {
+            "login_btn": 'header > .PYoGFg.DwB3TQ button:last-child',
+        }
+        
+        login_text = self.scraper.get_text(selectors["login_btn"])
+        if login_text.lower().strip() == "log in":
+            logger.error("\tERROR: You should login manually to canva")
+            quit()
         
     def remove_bg_image(self, image_path: str) -> str:
         """ Remove background image from canva
@@ -42,6 +55,9 @@ class Canva ():
         # Go to canva home page
         self.scraper.set_page(self.pages["home"])
         self.scraper.refresh_selenium()
+        
+        # Validate login
+        self.__validate_login__()
         
         # Upload image
         self.scraper.click_js(selectors["new_btn"])
