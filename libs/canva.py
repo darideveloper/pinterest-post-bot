@@ -28,15 +28,33 @@ class Canva ():
         }
         self.media_folder = os.path.join(parent_folder, "media")
         
+        # Get current ad link
         csv_path = os.path.join(parent_folder, "ads.csv")
         with open(csv_path, "r") as csv_file:
             reader = csv.reader(csv_file)
             ads_links = list(reader)
         
+        self.ad_link = None
         for id, ad_link in ads_links:
             if id == str(AD_ID):
                 self.ad_link = ad_link
                 break
+        
+        # Validate ad link
+        if not self.ad_link:
+            logger.error(f"\tERROR: Ad with id {AD_ID} not found in ads.csv file")
+            quit()
+            
+        # Organize add functions
+        ad_functions = [
+            self.create_ad_1,
+        ]
+        
+        # Validate ad id
+        ads_function_len = len(ad_functions)
+        if AD_ID > ads_function_len:
+            logger.error(f"\tERROR: Only {ads_function_len} ads are available")
+            quit()
         
         print()
         
