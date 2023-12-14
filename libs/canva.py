@@ -1,7 +1,10 @@
 import os
 import sys
+import csv
 from time import sleep
 from selenium.webdriver.common.keys import Keys
+from dotenv import load_dotenv
+load_dotenv()
 
 # Add parent folder to path
 current_folder = os.path.dirname(__file__)
@@ -10,6 +13,8 @@ sys.path.append(parent_folder)
 
 from scraping.web_scraping import WebScraping
 from logs import logger
+
+AD_ID = int(os.getenv("AD_ID"))
 
 
 class Canva ():
@@ -22,7 +27,19 @@ class Canva ():
             "home": "https://www.canva.com/",
         }
         self.media_folder = os.path.join(parent_folder, "media")
-    
+        
+        csv_path = os.path.join(parent_folder, "ads.csv")
+        with open(csv_path, "r") as csv_file:
+            reader = csv.reader(csv_file)
+            ads_links = list(reader)
+        
+        for id, ad_link in ads_links:
+            if id == str(AD_ID):
+                self.ad_link = ad_link
+                break
+        
+        print()
+        
     def __validate_login__(self):
         """ Validate if user is logged in """
         
@@ -111,13 +128,12 @@ class Canva ():
         image_path = os.path.join(self.media_folder, new_image)
         return image_path
     
-    def create_ad_1(self, add_link: str, title: str, price_1: float,
+    def create_ad_1(self, title: str, price_1: float,
                     price_2: float, price_3: float, price_4: float,
                     image_path: str) -> str:
         """ Replace data in add template 1, and download image
         
         Args:
-            add_link (str): Link of add template
             title (str): Title of add
             price_1 (float): Cheaper price
             price_2 (float): 2nd cheaper price
@@ -158,7 +174,7 @@ class Canva ():
             'confirm_download_btn': 'div.v8cAAw button',
         }
         
-        self.scraper.set_page(add_link)
+        self.scraper.set_page(self.ad_link)
         self.scraper.refresh_selenium()
         
         # Replace titlle
@@ -246,7 +262,6 @@ class Canva ():
             
         # Validate if ad was downloaded
         if not new_video:
-            logger.error("\tERROR: Can't download ad")
             return None
                 
         # Return ad path
@@ -264,10 +279,7 @@ if __name__ == "__main__":
     canva = Canva(scraper)
     image_path = os.path.join(media_folder, "sample.png")
     
-    # canva.remove_bg_image(image_path)
-    
     canva.create_ad_1(
-        add_link="https://www.canva.com/design/DAF2ygpQ0rM/g4ZdDtW41Z-oQD8sUwL4Yw/edit",
         title="Sample title",
         price_1=1.99,
         price_2=2.99,

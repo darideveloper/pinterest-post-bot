@@ -127,6 +127,9 @@ class PinterestBot(WebScraping):
         
         # Create ad
         logger.info("\tcreating ad...")
+        # ad = self.canva.create_ad(image, title, description, link)
+        
+        logger.error("\tERROR: Can't download ad")
         
         # Validate login
         self.__login__()
