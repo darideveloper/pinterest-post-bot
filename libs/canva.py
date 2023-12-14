@@ -204,7 +204,7 @@ class Canva ():
         
         # Upload new image
         self.scraper.send_data(selectors["input_image"], image_path)
-        sleep(5)
+        sleep(10)
         self.scraper.refresh_selenium()
         self.scraper.click_js(selectors["insert_image_btn"])
         sleep(1)
@@ -234,12 +234,23 @@ class Canva ():
         self.scraper.click_js(selectors["download_btn"])
         self.scraper.refresh_selenium()
         self.scraper.click_js(selectors["confirm_download_btn"])
-        sleep(5)
-        new_media = os.listdir(self.media_folder)
         
-        # Detect new video
-        new_video = list(set(new_media) - set(old_media))[0]
-        video_path = os.path.join(self.media_folder, new_video)
+        # Wait for download ad
+        for _ in range(10):
+            new_media = os.listdir(self.media_folder)
+            new_video = list(set(new_media) - set(old_media))
+            if new_video:
+                break
+            else:
+                sleep(5)
+            
+        # Validate if ad was downloaded
+        if not new_video:
+            logger.error("\tERROR: Can't download ad")
+            return None
+                
+        # Return ad path
+        video_path = os.path.join(self.media_folder, new_video[0])
         return video_path
 
 
@@ -251,7 +262,7 @@ if __name__ == "__main__":
         download_folder=media_folder
     )
     canva = Canva(scraper)
-    image_path = os.path.join(media_folder, "sample.webp")
+    image_path = os.path.join(media_folder, "sample.png")
     
     # canva.remove_bg_image(image_path)
     
