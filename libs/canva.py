@@ -48,7 +48,7 @@ class Canva ():
         }
         
         login_text = self.scraper.get_text(selectors["login_btn"])
-        if login_text.lower().strip() == "log in":
+        if login_text and login_text.lower().strip() == "log in":
             logger.error("\tERROR: You should login manually to canva")
             quit()
             
@@ -277,7 +277,7 @@ if __name__ == "__main__":
         download_folder=media_folder
     )
     canva = Canva(scraper)
-    image_path = os.path.join(media_folder, "sample.png")
+    image_path = os.path.join(media_folder, "sample.webp")
     
     canva.create_ad_1(
         title="Sample title",

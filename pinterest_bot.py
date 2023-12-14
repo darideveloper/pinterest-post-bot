@@ -10,11 +10,22 @@ load_dotenv()
 CHROME_FOLDER = os.getenv("CHROME_FOLDER")
 WAIT_TIME = os.getenv("WAIT_TIME")
 HEADLESS = os.getenv("HEADLESS") == "True"
+AD_ID = int(os.getenv("AD_ID"))
 
 
 class PinterestBot(WebScraping):
 
-    def __init__(self):
+    def __init__(self, price_1: float, price_2: float, price_3: float,
+                 price_4: float):
+        """ Save general ads data
+
+        Args:
+            price_1 (float): lower price from scrape
+            price_2 (float): 2nd lower price from scrape
+            price_3 (float): 3rd lower price from scrape
+            price_4 (float): 4th lower price from scrape
+        """
+        
         self.pages = {
             "home": "https://www.pinterest.com/",
             "post": "https://www.pinterest.com/pin-creation-tool/"
@@ -29,6 +40,12 @@ class PinterestBot(WebScraping):
         
         # Connect to canva
         self.canva = Canva(self)
+        
+        # Save lower prices
+        self.price_1 = price_1
+        self.price_2 = price_2
+        self.price_3 = price_3
+        self.price_4 = price_4
 
     def __login__(self):
         """ Open browser go to pinterest and validate session """
@@ -127,7 +144,15 @@ class PinterestBot(WebScraping):
         
         # Create ad
         logger.info("\tcreating ad...")
-        # ad = self.canva.create_ad(image, title, description, link)
+        if AD_ID == 1:
+            ad_path = self.canva.create_ad_1(
+                title=title,
+                price_1=self.price_1,
+                price_2=self.price_2,
+                price_3=self.price_3,
+                price_4=self.price_4,
+                image_path=image
+            )
         
         logger.error("\tERROR: Can't download ad")
         
@@ -149,7 +174,7 @@ class PinterestBot(WebScraping):
         self.refresh_selenium()
         
         # Upload image
-        self.send_data(selectors["input_image"], image)
+        self.send_data(selectors["input_image"], ad_path)
         self.refresh_selenium()
      
         # Detect errors uploading image
@@ -180,7 +205,12 @@ if __name__ == "__main__":
     media_folder = os.path.join(current_folder, "media")
     file_path = os.path.join(media_folder, "sample.webp")
 
-    pinterest_bot = PinterestBot()
+    pinterest_bot = PinterestBot(
+        price_1=2999.0,
+        price_2=3999.0,
+        price_3=4999.0,
+        price_4=5999.0,
+    )
     pinterest_bot.post(
         file_path,
         "test 1",

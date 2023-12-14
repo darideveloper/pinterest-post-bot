@@ -18,9 +18,6 @@ WAIT_TIME_POST = int(os.environ.get('WAIT_TIME_POST', 10))
 app = Flask(__name__)
 CORS(app)
 
-# Start bot
-bot = PinterestBot()
-
 
 def create_posts(post_data: list):
     """ Create each pinterest post
@@ -28,6 +25,21 @@ def create_posts(post_data: list):
     Args:
         post_data (list): List of post dicts
     """
+    
+    # Get 4 lower prices
+    lower_prices = post_data[:4]
+    price_1 = lower_prices[0]["price"]
+    price_2 = lower_prices[1]["price"]
+    price_3 = lower_prices[2]["price"]
+    price_4 = lower_prices[3]["price"]
+    
+    # Start bot
+    bot = PinterestBot(
+        price_1,
+        price_2,
+        price_3,
+        price_4,
+    )
     
     for post in post_data:
         
