@@ -113,7 +113,7 @@ class Canva ():
     
     def create_ad_1(self, add_link: str, title: str, price_1: float,
                     price_2: float, price_3: float, price_4: float,
-                    image_path: str):
+                    image_path: str) -> str:
         """ Replace data in add template 1, and download image
         
         Args:
@@ -124,6 +124,9 @@ class Canva ():
             price_3 (float): 3rd cheaper price
             price_4 (float): 4th cheaper price
             image_path (str): Path of image to upload
+            
+        Returns:
+            str: Path of video downloaded
         """
         
         selectors = {
@@ -158,79 +161,86 @@ class Canva ():
         self.scraper.set_page(add_link)
         self.scraper.refresh_selenium()
         
-        # # Replace titlle
-        # html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
-        #         color: rgb(82, 113, 255); text-decoration: none;">{title}</span>"""
-        # self.__insert_innerhtml__(selectors['title'], html)
-        # sleep(2)
+        # Replace titlle
+        html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
+                color: rgb(82, 113, 255); text-decoration: none;">{title}</span>"""
+        self.__insert_innerhtml__(selectors['title'], html)
+        sleep(2)
         
-        # # Replace cheaper price
-        # html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
-        #        color: rgb(54, 48, 98); text-decoration: none;">Cheaper: </span><span
-        #        class="OYPEnA" style="font-weight: 400; font-style: normal; color:
-        #        rgb(82, 113, 255); text-decoration: none;">US ${price_1}</span>"""
-        # self.__insert_innerhtml__(selectors['price_1'], html)
-        # sleep(2)
+        # Replace cheaper price
+        html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
+               color: rgb(54, 48, 98); text-decoration: none;">Cheaper: </span><span
+               class="OYPEnA" style="font-weight: 400; font-style: normal; color:
+               rgb(82, 113, 255); text-decoration: none;">US ${price_1}</span>"""
+        self.__insert_innerhtml__(selectors['price_1'], html)
+        sleep(2)
 
-        # # Replace 2nd, 3rd and 4th cheaper prices
-        # seconday_prices = [
-        #     ["2nd", price_2, selectors['price_2']],
-        #     ["3rd", price_3, selectors['price_3']],
-        #     ["4th", price_4, selectors['price_4']],
-        # ]
+        # Replace 2nd, 3rd and 4th cheaper prices
+        seconday_prices = [
+            ["2nd", price_2, selectors['price_2']],
+            ["3rd", price_3, selectors['price_3']],
+            ["4th", price_4, selectors['price_4']],
+        ]
         
-        # for secondary_price in seconday_prices:
-        #     position, price, selector = secondary_price
+        for secondary_price in seconday_prices:
+            position, price, selector = secondary_price
         
-        #     # Replace price
-        #     html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
-        #     color: rgb(54, 48, 98); text-decoration: none;">{position} place: </span>
-        #     <span class="OYPEnA" style="font-weight: 400; font-style: normal; color:
-        #     rgb(82, 113, 255); text-decoration: none;">US ${price}</span>"""
-        #     self.__insert_innerhtml__(selector, html)
-        #     sleep(2)
+            # Replace price
+            html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
+            color: rgb(54, 48, 98); text-decoration: none;">{position} place: </span>
+            <span class="OYPEnA" style="font-weight: 400; font-style: normal; color:
+            rgb(82, 113, 255); text-decoration: none;">US ${price}</span>"""
+            self.__insert_innerhtml__(selector, html)
+            sleep(2)
         
-        # # Delete image
-        # self.__select_layer__(5)
-        # self.scraper.click_js(selectors["delete_btn"])
-        # self.scraper.refresh_selenium()
+        # Delete image
+        self.__select_layer__(5)
+        self.scraper.click_js(selectors["delete_btn"])
+        self.scraper.refresh_selenium()
         
-        # # Move to files tab
-        # self.scraper.click_js(selectors["files_tab"])
-        # self.scraper.refresh_selenium()
+        # Move to files tab
+        self.scraper.click_js(selectors["files_tab"])
+        self.scraper.refresh_selenium()
         
-        # # Upload new image
-        # self.scraper.send_data(selectors["input_image"], image_path)
-        # sleep(5)
-        # self.scraper.refresh_selenium()
-        # self.scraper.click_js(selectors["insert_image_btn"])
-        # sleep(1)
+        # Upload new image
+        self.scraper.send_data(selectors["input_image"], image_path)
+        sleep(5)
+        self.scraper.refresh_selenium()
+        self.scraper.click_js(selectors["insert_image_btn"])
+        sleep(1)
         
-        # # Deselect image going to draw tab
-        # self.scraper.click_js(selectors["draw_tab"])
-        # self.scraper.refresh_selenium()
+        # Deselect image going to draw tab
+        self.scraper.click_js(selectors["draw_tab"])
+        self.scraper.refresh_selenium()
         
-        # # Scale image
-        # self.__select_layer__(5)
-        # self.scraper.click_js(selectors["organize_tab"])
-        # self.scraper.refresh_selenium()
-        # self.scraper.click_js(selectors["lock_relation_btn"])
-        # for _ in range(7):
-        #     self.scraper.send_data(selectors["height_input"], Keys.BACKSPACE)
-        # self.scraper.send_data(selectors["height_input"], "790")
-        # self.scraper.send_data(selectors["height_input"], Keys.ENTER)
+        # Scale image
+        self.__select_layer__(5)
+        self.scraper.click_js(selectors["organize_tab"])
+        self.scraper.refresh_selenium()
+        self.scraper.click_js(selectors["lock_relation_btn"])
+        for _ in range(7):
+            self.scraper.send_data(selectors["height_input"], Keys.BACKSPACE)
+        self.scraper.send_data(selectors["height_input"], "790")
+        self.scraper.send_data(selectors["height_input"], Keys.ENTER)
         
-        # # Center image
-        # self.scraper.click_js(selectors["center_x_btn"])
-        # self.scraper.click_js(selectors["center_y_btn"])
+        # Center image
+        self.scraper.click_js(selectors["center_x_btn"])
+        self.scraper.click_js(selectors["center_y_btn"])
         
         # Download image
+        old_media = os.listdir(self.media_folder)
         self.scraper.click_js(selectors["share_btn"])
         self.scraper.refresh_selenium()
         self.scraper.click_js(selectors["download_btn"])
         self.scraper.refresh_selenium()
         self.scraper.click_js(selectors["confirm_download_btn"])
-        sleep(10)
+        sleep(5)
+        new_media = os.listdir(self.media_folder)
+        
+        # Detect new video
+        new_video = list(set(new_media) - set(old_media))[0]
+        video_path = os.path.join(self.media_folder, new_video)
+        return video_path
 
 
 if __name__ == "__main__":
