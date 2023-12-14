@@ -1,6 +1,7 @@
 import os
 import sys
 from time import sleep
+from selenium.webdriver.common.keys import Keys
 
 # Add parent folder to path
 current_folder = os.path.dirname(__file__)
@@ -20,7 +21,7 @@ class Canva ():
         self.pages = {
             "home": "https://www.canva.com/",
         }
-        self.images_folder = os.path.join(parent_folder, "images")
+        self.media_folder = os.path.join(parent_folder, "media")
     
     def __validate_login__(self):
         """ Validate if user is logged in """
@@ -34,7 +35,7 @@ class Canva ():
             logger.error("\tERROR: You should login manually to canva")
             quit()
             
-    def __insert_innerhtml__ (self, selector, inner_html):
+    def __insert_innerhtml__(self, selector, inner_html):
         """ Insert inner html in element
         
         Args:
@@ -45,7 +46,7 @@ class Canva ():
         script = f"""document.querySelector ('{selector}').innerHTML = `{inner_html}`"""
         self.scraper.driver.execute_script(script)
     
-    def __select_layer__ (self, layer_index: int):
+    def __select_layer__(self, layer_index: int):
         """ Select specific layer in canva aside
 
         Args:
@@ -54,7 +55,6 @@ class Canva ():
         
         selector_show_layers = 'main div:nth-child(1) button'
         selector_layer = f'div:nth-child({layer_index}) > div:nth-child(3) button'
-        
         
         self.scraper.click_js(selector_show_layers)
         self.scraper.refresh_selenium()
@@ -99,19 +99,19 @@ class Canva ():
         self.scraper.refresh_selenium()
         
         # Download image
-        old_images = os.listdir(self.images_folder)
+        old_media = os.listdir(self.media_folder)
         self.scraper.click_js(selectors["save_btn"])
         self.scraper.refresh_selenium()
         self.scraper.click_js(selectors["download_btn"])
         sleep(3)
-        new_images = os.listdir(self.images_folder)
+        new_media = os.listdir(self.media_folder)
         
         # Detect new image
-        new_image = list(set(new_images) - set(old_images))[0]
-        image_path = os.path.join(self.images_folder, new_image)
+        new_image = list(set(new_media) - set(old_media))[0]
+        image_path = os.path.join(self.media_folder, new_image)
         return image_path
     
-    def create_ad_1(self, add_link: str, title: str, price_1: float, 
+    def create_ad_1(self, add_link: str, title: str, price_1: float,
                     price_2: float, price_3: float, price_4: float,
                     image_path: str):
         """ Replace data in add template 1, and download image
@@ -138,97 +138,110 @@ class Canva ():
             'delete_btn': 'div.awStMQ div:nth-child(2) > button',
             'files_tab': 'aside div:nth-child(6) > button',
             'input_image': 'input[type="file"]',
-            'insert_image_btn': 'div.x6XCCg div:nth-child(2) > div.D_ZUcw div[role="button"]',
+            'insert_image_btn': 'div.x6XCCg div:nth-child(2) '
+                                '> div.D_ZUcw div[role="button"]',
             
             # scale and position image
+            'draw_tab': 'div:nth-child(7) > button',
             'organize_tab': 'div.gezMZQ button.zCtFuA',
             'lock_relation_btn': 'div.Ey7S7w button',
             'height_input': 'div.Ey7S7w > div:nth-child(2) input',
             'center_x_btn': 'div:nth-child(3) > ul > li:nth-child(4) > button',
-            'center_y_btn': 'div:nth-child(3) > ul > li:nth-child(3) > button',            
+            'center_y_btn': 'div:nth-child(3) > ul > li:nth-child(3) > button',
             
-            # Save and download
-            'file_tab': '[aria-controls="header_item5"]',
-            'save_btn': 'li:nth-child(9) > button',
-            "download_btn": 'div:nth-child(9) button:last-child',
+            # Download ad
+            'share_btn': 'header div.g3Pdkg button',
+            'download_btn': 'div.Q0yqLQ li > button',
+            'confirm_download_btn': 'div.v8cAAw button',
         }
         
         self.scraper.set_page(add_link)
         self.scraper.refresh_selenium()
         
-        # Replace titlle
-        html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
-                color: rgb(82, 113, 255); text-decoration: none;">{title}</span>"""
-        self.__insert_innerhtml__ (selectors['title'], html)
-        sleep(2)
+        # # Replace titlle
+        # html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
+        #         color: rgb(82, 113, 255); text-decoration: none;">{title}</span>"""
+        # self.__insert_innerhtml__(selectors['title'], html)
+        # sleep(2)
         
-        # Replace cheaper price
-        html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal; 
-               color: rgb(54, 48, 98); text-decoration: none;">Cheaper: </span><span 
-               class="OYPEnA" style="font-weight: 400; font-style: normal; color: 
-               rgb(82, 113, 255); text-decoration: none;">US ${price_1}</span>"""
-        self.__insert_innerhtml__ (selectors['price_1'], html)
-        sleep(2)
+        # # Replace cheaper price
+        # html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
+        #        color: rgb(54, 48, 98); text-decoration: none;">Cheaper: </span><span
+        #        class="OYPEnA" style="font-weight: 400; font-style: normal; color:
+        #        rgb(82, 113, 255); text-decoration: none;">US ${price_1}</span>"""
+        # self.__insert_innerhtml__(selectors['price_1'], html)
+        # sleep(2)
 
-
-        # Replace 2nd, 3rd and 4th cheaper prices
-        seconday_prices = [
-            ["2nd", price_2, selectors['price_2']],
-            ["3rd", price_3, selectors['price_3']],
-            ["4th", price_4, selectors['price_4']],
-        ]
+        # # Replace 2nd, 3rd and 4th cheaper prices
+        # seconday_prices = [
+        #     ["2nd", price_2, selectors['price_2']],
+        #     ["3rd", price_3, selectors['price_3']],
+        #     ["4th", price_4, selectors['price_4']],
+        # ]
         
-        for secondary_price in seconday_prices:
-            position, price, selector = secondary_price
+        # for secondary_price in seconday_prices:
+        #     position, price, selector = secondary_price
         
-            # Replace price
-            html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal; color: 
-            rgb(54, 48, 98); text-decoration: none;">{position} place: </span><span class="OYPEnA" 
-            style="font-weight: 400; font-style: normal; color: rgb(82, 113, 255); 
-            text-decoration: none;">US ${price}</span>"""
-            self.__insert_innerhtml__ (selector, html)
-            sleep(2)
+        #     # Replace price
+        #     html = f"""<span class="OYPEnA" style="font-weight: 400; font-style: normal;
+        #     color: rgb(54, 48, 98); text-decoration: none;">{position} place: </span>
+        #     <span class="OYPEnA" style="font-weight: 400; font-style: normal; color:
+        #     rgb(82, 113, 255); text-decoration: none;">US ${price}</span>"""
+        #     self.__insert_innerhtml__(selector, html)
+        #     sleep(2)
         
+        # # Delete image
+        # self.__select_layer__(5)
+        # self.scraper.click_js(selectors["delete_btn"])
+        # self.scraper.refresh_selenium()
         
-        # Delete image
-        self.__select_layer__(5)
-        self.scraper.click_js(selectors["delete_btn"])
-        self.scraper.refresh_selenium()
+        # # Move to files tab
+        # self.scraper.click_js(selectors["files_tab"])
+        # self.scraper.refresh_selenium()
         
-        # Move to files tab
-        self.scraper.click_js(selectors["files_tab"])
-        self.scraper.refresh_selenium()
+        # # Upload new image
+        # self.scraper.send_data(selectors["input_image"], image_path)
+        # sleep(5)
+        # self.scraper.refresh_selenium()
+        # self.scraper.click_js(selectors["insert_image_btn"])
+        # sleep(1)
         
-        # Upload new image
-        self.scraper.send_data(selectors["input_image"], image_path)
-        sleep(5)
-        self.scraper.refresh_selenium()
-        self.scraper.click_js(selectors["insert_image_btn"])
+        # # Deselect image going to draw tab
+        # self.scraper.click_js(selectors["draw_tab"])
+        # self.scraper.refresh_selenium()
         
-        # Scale image
-        self.__select_layer__(5)
+        # # Scale image
+        # self.__select_layer__(5)
+        # self.scraper.click_js(selectors["organize_tab"])
+        # self.scraper.refresh_selenium()
+        # self.scraper.click_js(selectors["lock_relation_btn"])
+        # for _ in range(7):
+        #     self.scraper.send_data(selectors["height_input"], Keys.BACKSPACE)
+        # self.scraper.send_data(selectors["height_input"], "790")
+        # self.scraper.send_data(selectors["height_input"], Keys.ENTER)
         
-        # Center image
+        # # Center image
+        # self.scraper.click_js(selectors["center_x_btn"])
+        # self.scraper.click_js(selectors["center_y_btn"])
         
         # Download image
-        
-        # Save changes
-        self.scraper.click_js(selectors["file_tab"])
+        self.scraper.click_js(selectors["share_btn"])
         self.scraper.refresh_selenium()
-        self.scraper.click_js(selectors["save_btn"])
-        sleep(3)
-        print ()
+        self.scraper.click_js(selectors["download_btn"])
+        self.scraper.refresh_selenium()
+        self.scraper.click_js(selectors["confirm_download_btn"])
+        sleep(10)
 
 
 if __name__ == "__main__":
-    images_folder = os.path.join(parent_folder, "images")
+    media_folder = os.path.join(parent_folder, "media")
     scraper = WebScraping(
         start_killing=True,
         chrome_folder="C:\\Users\\herna\\AppData\\Local\\Google\\Chrome\\User Data",
-        download_folder=images_folder
+        download_folder=media_folder
     )
     canva = Canva(scraper)
-    image_path = os.path.join(images_folder, "sample.webp")
+    image_path = os.path.join(media_folder, "sample.webp")
     
     # canva.remove_bg_image(image_path)
     
