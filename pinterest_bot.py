@@ -121,9 +121,12 @@ class PinterestBot(WebScraping):
         """
         
         # remove bg from image with canva
-        logger.info("\tremoving background from image")
+        logger.info("\tremoving background from image...")
         crop_image(image)
         image = self.canva.remove_bg_image(image)
+        
+        # Create ad
+        logger.info("\tcreating ad...")
         
         # Validate login
         self.__login__()
@@ -171,8 +174,8 @@ class PinterestBot(WebScraping):
 
 if __name__ == "__main__":
     current_folder = os.path.dirname(__file__)
-    images_folder = os.path.join(current_folder, "images")
-    file_path = os.path.join(images_folder, "sample.webp")
+    media_folder = os.path.join(current_folder, "media")
+    file_path = os.path.join(media_folder, "sample.webp")
 
     pinterest_bot = PinterestBot()
     pinterest_bot.post(

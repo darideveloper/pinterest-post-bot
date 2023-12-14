@@ -3,11 +3,11 @@ import requests
 import secrets
 
 current_folder = os.path.dirname(__file__)
-images_folder = os.path.join(current_folder, 'images')
+media_folder = os.path.join(current_folder, 'media')
 
 
 def download_image(link: str) -> str:
-    """ Download image and save in "images" folder
+    """ Download image and save in "media" folder
 
     Args:
         link (str): url of image
@@ -27,7 +27,7 @@ def download_image(link: str) -> str:
     image_hash = secrets.token_hex(8)
     image_extension = link.split('.')[-1]
     image_extension = image_extension.split('?')[0]
-    image_path = os.path.join(images_folder, f'{image_hash}.{image_extension}')
+    image_path = os.path.join(media_folder, f'{image_hash}.{image_extension}')
     with open(image_path, "wb") as file:
         for chunk in res:
             file.write(chunk)
