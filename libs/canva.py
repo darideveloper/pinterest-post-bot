@@ -271,7 +271,14 @@ class Canva ():
         
         # Wait for download ad
         for _ in range(10):
+            
+            # Get new files in folder
             new_media = os.listdir(self.media_folder)
+            
+            # Ignore .tmp file
+            new_media = list(filter(lambda file: ".tmp" not in file, new_media))
+                      
+            # Detect new video
             new_video = list(set(new_media) - set(old_media))
             if new_video:
                 break
