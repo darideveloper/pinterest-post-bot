@@ -154,7 +154,9 @@ class PinterestBot(WebScraping):
                 image_path=image
             )
         
-        logger.error("\tERROR: Can't download ad")
+        if not ad_path:
+            logger.error("\tERROR: Can't download ad")
+            return None
         
         # Validate login
         self.__login__()
