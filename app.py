@@ -64,7 +64,7 @@ def create_posts(post_data: list):
         
         # Generate pin/post title
         keyword = post["keyword"]
-        title = f"{keyword.title()} Real-Time Price Comparison!"
+        title = keyword.title()
         
         # previee page link
         link = post["url"].replace(

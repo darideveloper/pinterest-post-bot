@@ -62,9 +62,9 @@ def get_tags_description(keyword: str, title: str, price: float, rate_number: in
                 2.- Once the elements of point "1.-" have been determined, make a description in the English language of the USA, optimized for SEO, of no less than 400 and no more than 500 characters, in a colloquial and at the same time persuasive tone that induces the viewer of the pin to click on the link either to review the comparison or to purchase the item. Integrate as many related keywords into this description as the syntax allows without losing coherence. After the description, in a continuous paragraph paste all the between 3 and 7 hashtags one after the other, only separated by a space. Take as long as necessary.
                 3.- Only present to me the elements of point "2.-".
                     
-                Return the respnse in json with the keys: "keywords", and "description". Be sure to don't add the keyword to the description.
-                
                 Be sure that the response description including tags is not longer than 500 characters
+                
+                Return the respnse in json with the keys: "keywords", and "description". Be sure to don't add the keyword to the description.
                 """
             }
         ],
