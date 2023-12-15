@@ -6,7 +6,7 @@ from flask_cors import CORS
 from pinterest_bot import PinterestBot
 from threading import Thread
 from libs.images import download_image
-from apis.chatgpt_api import get_tags_description
+from libs.chatgpt import get_tags_description
 from logs import logger
 
 # Read settings
