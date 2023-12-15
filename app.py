@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from flask_cors import CORS
 from pinterest_bot import PinterestBot
 from threading import Thread
-from tools import download_image
+from libs.images import download_image
 from apis.chatgpt_api import get_tags_description
 from logs import logger
 

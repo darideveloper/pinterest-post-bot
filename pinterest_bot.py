@@ -4,7 +4,7 @@ from logs import logger
 from dotenv import load_dotenv
 from scraping.web_scraping import WebScraping
 from libs.canva import Canva
-from libs.image_editor import crop_image
+from libs.images import crop_image
 from selenium.webdriver.common.keys import Keys
 
 load_dotenv()
