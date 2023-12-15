@@ -63,6 +63,8 @@ def get_tags_description(keyword: str, title: str, price: float, rate_number: in
                 3.- Only present to me the elements of point "2.-".
                     
                 Return the respnse in json with the keys: "keywords", and "description". Be sure to don't add the keyword to the description.
+                
+                Be sure that the response description including tags is not longer than 500 characters
                 """
             }
         ],
