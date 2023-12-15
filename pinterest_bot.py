@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from scraping.web_scraping import WebScraping
 from libs.canva import Canva
 from libs.image_editor import crop_image
+from selenium.webdriver.common.keys import Keys
 
 load_dotenv()
 CHROME_FOLDER = os.getenv("CHROME_FOLDER")
@@ -109,6 +110,11 @@ class PinterestBot(WebScraping):
         }
 
         for tag in tags:
+            
+            # Delete olf characters
+            for _ in range(10):
+                self.send_data(selectors["input"], Keys.BACKSPACE)
+                sleep(0.1)
             
             # send only first 7 chars
             tag_small = tag[:7]
