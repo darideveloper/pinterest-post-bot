@@ -200,7 +200,7 @@ class PinterestBot(WebScraping):
         self.__select_create_board__(board)
 
         # select tags
-        self.__select_tags__(tags)
+        # self.__select_tags__(tags)
         
         # Submit post
         self.click_js(selectors["btn_done"])
