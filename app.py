@@ -92,6 +92,13 @@ def create_posts(post_data: list):
         sleep(WAIT_TIME_POST)
 
 
+def show_start_message():
+    """ Show start message """
+    
+    sleep(5)
+    logger.info("**BOT READY TO CREATE POSTS**")
+
+
 @app.get("/")
 def index():
     return {
@@ -119,4 +126,9 @@ def create_pinterest_post():
 
 
 if __name__ == "__main__":
+    
+    # Create thread for show start message
+    thread_obj = Thread(target=show_start_message)
+    thread_obj.start()
+    
     app.run(port=PORT)
