@@ -69,32 +69,6 @@ class Canva ():
         if login_text and login_text.lower().strip() == "log in":
             logger.error("\tERROR: You should login manually to canva")
             quit()
-            
-    def __insert_innerhtml__(self, selector, inner_html):
-        """ Insert inner html in element
-        
-        Args:
-            selector (str): Selector of element
-            inner_html (str): Inner html to insert
-        """
-        
-        script = f"""document.querySelector ('{selector}').innerHTML = `{inner_html}`"""
-        self.scraper.driver.execute_script(script)
-    
-    def __select_layer__(self, layer_index: int):
-        """ Select specific layer in canva aside
-
-        Args:
-            layer_index (int): Index of layer to select
-        """
-        
-        selector_show_layers = 'main div:nth-child(1) button'
-        selector_layer = f'div:nth-child({layer_index}) > div:nth-child(3) button'
-        
-        self.scraper.click_js(selector_show_layers)
-        self.scraper.refresh_selenium()
-        self.scraper.click_js(selector_layer)
-        self.scraper.refresh_selenium()
         
     def remove_bg_image(self, image_path: str) -> str:
         """ Remove background image from canva
@@ -157,11 +131,5 @@ if __name__ == "__main__":
     canva = Canva(scraper)
     image_path = os.path.join(media_folder, "sample.webp")
     
-    canva.create_ad_1(
-        title="Sample title",
-        price_1=1.99,
-        price_2=2.99,
-        price_3=3.99,
-        price_4=4.99,
-        image_path=image_path,
-    )
+    # Remove background
+    new_image = canva.remove_bg_image(image_path)

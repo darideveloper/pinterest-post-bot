@@ -148,21 +148,8 @@ class PinterestBot(WebScraping):
         crop_image(image)
         image = self.canva.remove_bg_image(image)
         
-        # Create ad
+        # TODO: Create ad
         logger.info("\tcreating ad...")
-        if AD_ID == 1:
-            ad_path = self.canva.create_ad_1(
-                title=title,
-                price_1=self.price_1,
-                price_2=self.price_2,
-                price_3=self.price_3,
-                price_4=self.price_4,
-                image_path=image
-            )
-        
-        if not ad_path:
-            logger.error("\tERROR: Can't download ad")
-            return None
         
         # Validate login
         self.__login__()
