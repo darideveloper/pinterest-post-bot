@@ -1,4 +1,5 @@
 import os
+import random
 from time import sleep
 from flask import Flask, request, render_template
 from dotenv import load_dotenv
@@ -17,6 +18,10 @@ WAIT_TIME_POST = int(os.environ.get('WAIT_TIME_POST', 10))
 # Start flask
 app = Flask(__name__)
 CORS(app)
+
+# Paths
+current_folder = os.path.dirname(__file__)
+imgs_folder = os.path.join(current_folder, "static", "imgs")
 
 
 def create_posts(post_data: list):
@@ -128,6 +133,14 @@ def create_pinterest_post():
 @app.get("/ad-1")
 def ad_1():
     
+    # Get random bg image
+    imgs_folder_ad = os.path.join(imgs_folder, "ad-1")
+    images = os.listdir(imgs_folder_ad)
+    bg_image = random.choice(images)
+    
+    # Remove folder before "static" in image path
+    bg_image_path = f"/imgs/ad-1/{bg_image}"
+    
     # Get GET params
     product_name = request.args.get("product-name")
     product_image = request.args.get("product-image")
@@ -139,6 +152,7 @@ def ad_1():
     # Retun html template
     return render_template(
         "ad-1.html",
+        bg_image=bg_image_path,
         ad_num=1,
         product_name=product_name,
         product_image=product_image,
