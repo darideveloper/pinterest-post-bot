@@ -128,11 +128,24 @@ def create_pinterest_post():
 @app.get("/ad-1")
 def ad_1():
     
+    # Get GET params
+    product_name = request.args.get("product-name")
+    product_image = request.args.get("product-image")
+    product_price_1 = request.args.get("product-price-1")
+    product_price_2 = request.args.get("product-price-2")
+    product_price_3 = request.args.get("product-price-3")
+    product_price_4 = request.args.get("product-price-4")
+    
     # Retun html template
     return render_template(
         "ad-1.html",
         ad_num=1,
-        product_image="/imgs/sample.png"
+        product_name=product_name,
+        product_image=product_image,
+        product_price_1=product_price_1,
+        product_price_2=product_price_2,
+        product_price_3=product_price_3,
+        product_price_4=product_price_4,
     )
 
 
