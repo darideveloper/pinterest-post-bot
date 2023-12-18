@@ -1,6 +1,6 @@
 import os
 from time import sleep
-from flask import Flask, request
+from flask import Flask, request, render_template
 from dotenv import load_dotenv
 from flask_cors import CORS
 from pinterest_bot import PinterestBot
@@ -125,10 +125,21 @@ def create_pinterest_post():
     }
 
 
+@app.get("/ad-1")
+def ad_1():
+    
+    # Retun html template
+    return render_template(
+        "ad-1.html",
+        ad_num=1,
+        product_image="/imgs/sample.png"
+    )
+
+
 if __name__ == "__main__":
     
     # Create thread for show start message
     thread_obj = Thread(target=show_start_message)
     thread_obj.start()
     
-    app.run(port=PORT)
+    app.run(port=PORT, debug=True)

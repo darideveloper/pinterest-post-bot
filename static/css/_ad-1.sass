@@ -1,0 +1,84 @@
+@mixin border($border-scale: 1)
+    text-shadow: 0 0 1vh*$border-scale $blue, 0 0 1vh*$border-scale $blue, 0 0 1vh*$border-scale $blue, 0 0 1vh*$border-scale $blue
+
+.ad-1
+    .bg-image
+        width: 100%
+        height: 100%
+        position: absolute
+        top: 0
+        left: 0
+        z-index: -1
+
+    .title-wrapper
+        width: 58vh
+        height: 11vh
+        display: flex
+        align-items: center
+        justify-content: flex-end
+        flex-direction: column
+        margin: 0 auto
+
+        .title
+            width: 100%
+            font-size: 3.8vh
+            text-align: center
+            color: white
+            font-weight: regular
+            padding-top: 1vh
+            @include border(1)
+
+    .price
+        margin-top: 8vh
+        font-size: 2.8vh
+        font-weight: bold
+        width: 100%
+        padding-left: 33vh
+        color: $white
+        @include border(1)
+
+    .product-image-wrapper
+        width: 100%
+        height: 50vh
+        display: flex
+        align-items: center
+        justify-content: center
+        margin-top: 2vh
+
+        .product-image
+            height: 100%
+            width: auto
+            margin: 0 auto
+
+    .other-prices
+        color: $white
+        font-size: 2vh
+        width: auto
+        font-size: 2.5vh
+        width: auto
+        margin-left: 47.5vh
+        margin-top: 4.5vh
+
+        p
+            @include border(1)
+            margin-bottom: 0.2vh
+            position: relative
+            display: inline-block
+
+            &::after, &::before
+                content: ''
+                position: absolute
+                width: 70%
+                height: 0.4vh
+                top: 1vh
+                left: 0
+                margin-left: 15%
+                background-color: $red
+                z-index: 1
+
+            &::after
+                transform: rotate(18deg)
+
+            &::before
+                transform: rotate(-18deg)
+                

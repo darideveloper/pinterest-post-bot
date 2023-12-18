@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block ad_num %}1{% endblock %}
+{% block content %}
+  <img class="bg-image" src="{{ url_for('static', filename='imgs/ad-1/bg-1.jpeg') }}" alt="">
+
+  <div class="title-wrapper">
+    <p class="title">iPhone 15 iPhone 15 iPhone 15 iPhone 15 iPhone 15 iPhone 15</p>
+  </div>
+
+  <div class="price">
+    US $899
+  </div>
+
+  <div class="product-image-wrapper">
+    <img class="product-image" src="{{ url_for('static', filename=product_image) }}" alt="">
+  </div>
+
+  <div class="other-prices">
+    <p>US $899.00</p>
+    <p>US $899.00</p>
+    <p>US $899.00</p>
+  </div>
+{% endblock %}
