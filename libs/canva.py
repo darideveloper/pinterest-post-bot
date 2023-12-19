@@ -1,14 +1,13 @@
 import os
 import sys
-import csv
 from time import sleep
-from selenium.webdriver.common.keys import Keys
 from dotenv import load_dotenv
 load_dotenv()
 
 # Add parent folder to path
 current_folder = os.path.dirname(__file__)
 parent_folder = os.path.dirname(current_folder)
+imgs_folder = os.path.join(parent_folder, "static", "imgs", "temp")
 sys.path.append(parent_folder)
 
 from scraping.web_scraping import WebScraping
@@ -26,37 +25,8 @@ class Canva ():
         self.pages = {
             "home": "https://www.canva.com/",
         }
-        self.media_folder = os.path.join(parent_folder, "media")
         
-        # Get current ad link
-        csv_path = os.path.join(parent_folder, "ads.csv")
-        with open(csv_path, "r") as csv_file:
-            reader = csv.reader(csv_file)
-            ads_links = list(reader)
-        
-        self.ad_link = None
-        for id, ad_link in ads_links:
-            if id == str(AD_ID):
-                self.ad_link = ad_link
-                break
-        
-        # Validate ad link
-        if not self.ad_link:
-            logger.error(f"\tERROR: Ad with id {AD_ID} not found in ads.csv file")
-            quit()
-            
-        # Organize add functions
-        ad_functions = [
-            self.create_ad_1,
-        ]
-        
-        # Validate ad id
-        ads_function_len = len(ad_functions)
-        if AD_ID > ads_function_len:
-            logger.error(f"\tERROR: Only {ads_function_len} ads are available")
-            quit()
-        
-        print()
+        self.__validate_login__()
         
     def __validate_login__(self):
         """ Validate if user is logged in """
@@ -108,28 +78,27 @@ class Canva ():
         self.scraper.refresh_selenium()
         
         # Download image
-        old_media = os.listdir(self.media_folder)
+        old_imgs = os.listdir(imgs_folder)
         self.scraper.click_js(selectors["save_btn"])
         self.scraper.refresh_selenium()
         self.scraper.click_js(selectors["download_btn"])
         sleep(3)
-        new_media = os.listdir(self.media_folder)
+        new_imgs = os.listdir(imgs_folder)
         
         # Detect new image
-        new_image = list(set(new_media) - set(old_media))[0]
-        image_path = os.path.join(self.media_folder, new_image)
+        new_image = list(set(new_imgs) - set(old_imgs))[0]
+        image_path = os.path.join(imgs_folder, new_image)
         return image_path
     
     
 if __name__ == "__main__":
-    media_folder = os.path.join(parent_folder, "media")
     scraper = WebScraping(
         start_killing=True,
         chrome_folder="C:\\Users\\herna\\AppData\\Local\\Google\\Chrome\\User Data",
-        download_folder=media_folder
+        download_folder=imgs_folder
     )
     canva = Canva(scraper)
-    image_path = os.path.join(media_folder, "sample.webp")
+    image_path = os.path.join(imgs_folder, "sample.png")
     
     # Remove background
     new_image = canva.remove_bg_image(image_path)
