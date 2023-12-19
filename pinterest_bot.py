@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from scraping.web_scraping import WebScraping
 from libs.canva import Canva
 from libs.images import crop_image
+from libs.ad_generator import AdGenerator
 from selenium.webdriver.common.keys import Keys
 
 load_dotenv()
@@ -41,6 +42,9 @@ class PinterestBot(WebScraping):
         
         # Connect to canva
         self.canva = Canva(self)
+        
+        # Connect to ad generator
+        self.ad_generator = AdGenerator(self)
         
         # Save lower prices
         self.price_1 = price_1
@@ -130,8 +134,7 @@ class PinterestBot(WebScraping):
                 logger.error(f"\tERROR: Tag '{tag}' not found")
             self.refresh_selenium()
 
-    def post(self, image: str, title: str, description: str, link: str,
-             board: str, tags: list):
+    def post(self, image: str, title: str, description: str, link: str, board: str):
         """ Create a post in pinterest
 
         Args:
@@ -146,10 +149,26 @@ class PinterestBot(WebScraping):
         # remove bg from image with canva
         logger.info("\tremoving background from image...")
         crop_image(image)
-        image = self.canva.remove_bg_image(image)
+        product_image = self.canva.remove_bg_image(image)
         
-        # TODO: Create ad
+        # Fix image path for add generator
+        image_image_name = product_image.split("\\")[-1]
+        image_image_path = f"imgs/temp/{image_image_name}"
+                
+        # Generate data for add
+        ad_data = {}
+        if AD_ID == 1:
+            ad_data["product_name"] = title
+            ad_data["product_image"] = image_image_path
+            ad_data["product_price_1"] = self.price_1
+            ad_data["product_price_2"] = self.price_2
+            ad_data["product_price_3"] = self.price_3
+            ad_data["product_price_4"] = self.price_4
+        
+        # Create ad
         logger.info("\tcreating ad...")
+        ad_image = self.ad_generator.create_ad_1(AD_ID, ad_data)
+        crop_image(ad_image)
         
         # Validate login
         self.__login__()
@@ -169,7 +188,7 @@ class PinterestBot(WebScraping):
         self.refresh_selenium()
         
         # Upload image
-        self.send_data(selectors["input_image"], ad_path)
+        self.send_data(selectors["input_image"], ad_image)
         self.refresh_selenium()
      
         # Detect errors uploading image
@@ -185,9 +204,6 @@ class PinterestBot(WebScraping):
 
         # select or create board
         self.__select_create_board__(board)
-
-        # select tags
-        # self.__select_tags__(tags)
         
         # Submit post
         self.click_js(selectors["btn_done"])
@@ -212,6 +228,5 @@ if __name__ == "__main__":
         "sample post",
         "https://www.pinterest.com/pin-creation-tool/",
         "price checker 2999",
-        ["sample", "audio"]
     )
     print()
