@@ -6,7 +6,7 @@ from PIL import Image
 
 current_folder = os.path.dirname(__file__)
 parent_folder = os.path.dirname(current_folder)
-media_folder = os.path.join(parent_folder, 'media')
+imgs_folder = os.path.join(parent_folder, 'static', 'temp')
 
 
 def download_image(link: str) -> str:
@@ -30,7 +30,7 @@ def download_image(link: str) -> str:
     image_hash = secrets.token_hex(8)
     image_extension = link.split('.')[-1]
     image_extension = image_extension.split('?')[0]
-    image_path = os.path.join(media_folder, f'{image_hash}.{image_extension}')
+    image_path = os.path.join(imgs_folder, f'{image_hash}.{image_extension}')
     with open(image_path, "wb") as file:
         for chunk in res:
             file.write(chunk)
