@@ -65,6 +65,8 @@ def get_tags_description(keyword: str, title: str, price: float, rate_number: in
                 Be sure that the response description including tags is not longer than 500 characters
                 
                 Return the respnse in json with the keys: "keywords", and "description". Be sure to don't add the keyword to the description.
+                
+                Be sure to only use BMP characters in the response
                 """
             }
         ],
