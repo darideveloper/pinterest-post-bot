@@ -55,8 +55,6 @@ class PinterestBot(WebScraping):
     def __login__(self):
         """ Open browser go to pinterest and validate session """
 
-        logger.info("Validating session")
-
         selectors = {
             "login_btn": '.red.SignupButton.active, button[tabindex="0"]'
         }
