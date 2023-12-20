@@ -199,9 +199,13 @@ class PinterestBot(WebScraping):
             return
 
         # Write text data (title, description and link)
-        self.send_data(selectors["input_title"], title)
-        self.send_data(selectors["input_description"], description)
-        self.send_data(selectors["link"], link)
+        try:
+            self.send_data(selectors["input_title"], title)
+            self.send_data(selectors["input_description"], description)
+            self.send_data(selectors["link"], link)
+        except Exception:
+            logger.error("\tERROR: Error writing text data, skipped...")
+            return
 
         # select or create board
         self.__select_create_board__(board)
