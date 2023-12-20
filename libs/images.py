@@ -63,3 +63,11 @@ def crop_image(image_path: str):
         return False
     
     return True
+
+def delete_temp_images ():
+    """ Delete all images in temp folder
+    """
+    
+    for image in os.listdir(imgs_folder):
+        image_path = os.path.join(imgs_folder, image)
+        os.remove(image_path)

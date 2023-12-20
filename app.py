@@ -9,6 +9,7 @@ from threading import Thread
 from libs.images import download_image
 from libs.chatgpt import get_tags_description
 from logs import logger
+from libs.images import delete_temp_images
 
 # Read settings
 load_dotenv()
@@ -96,12 +97,12 @@ def create_posts(post_data: list):
             board,
         )
         
-        # Delete post image
-        os.remove(image_path)
-        
         # Wait before next post
         sleep(WAIT_TIME_POST)
-
+        
+        # Delete all images in temp folder
+        delete_temp_images()
+                
 
 def show_start_message():
     """ Show start message """

@@ -85,9 +85,13 @@ class Canva ():
         sleep(3)
         new_imgs = os.listdir(imgs_folder)
         
-        # Detect new image
-        new_image = list(set(new_imgs) - set(old_imgs))[0]
-        image_path = os.path.join(imgs_folder, new_image)
+        # Detect and validate new image
+        new_image = list(set(new_imgs) - set(old_imgs))
+        if not new_image:
+            return None
+        
+        # Return image path
+        image_path = os.path.join(imgs_folder, new_image[0])
         return image_path
     
     
