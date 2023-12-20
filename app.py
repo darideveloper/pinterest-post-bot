@@ -52,7 +52,11 @@ def create_posts(post_data: list):
         max_post = len(post_data)
         logger.info(f"Posting {index} / {max_post}")
         
-        tags, description = get_tags_description(
+        if "title" not in post:
+            logger.info("\tpage ad, skiping...")
+            continue
+        
+        _, description = get_tags_description(
             post["keyword"],
             post["title"],
             post["price"],
@@ -87,7 +91,6 @@ def create_posts(post_data: list):
             description,
             link,
             board,
-            tags,
         )
         
         # Delete post image
@@ -100,7 +103,7 @@ def create_posts(post_data: list):
 def show_start_message():
     """ Show start message """
     
-    sleep(5)
+    sleep(3)
     logger.info("**BOT READY TO CREATE POSTS**")
 
 
