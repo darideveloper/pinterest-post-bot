@@ -148,7 +148,10 @@ class PinterestBot(WebScraping):
         
         # remove bg from image with canva
         logger.info("\tremoving background from image...")
-        crop_image(image)
+        cropped = crop_image(image)
+        if not cropped:
+            logger.error("\tERROR: Image not cropped, skipping post...")
+            return
         product_image = self.canva.remove_bg_image(image)
         
         # Fix image path for add generator
