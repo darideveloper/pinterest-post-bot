@@ -79,6 +79,9 @@ def create_posts(post_data: list):
         link = post["url"].replace(
             "http://localhost:5000",
             "https://www.price-checker.us"
+        ).replace(
+            "http://127.0.0.1:5000",
+            "https://www.price-checker.us"
         )
         
         # board name
