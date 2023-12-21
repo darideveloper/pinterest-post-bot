@@ -4,7 +4,7 @@ from logs import logger
 from datetime import datetime
 from dotenv import load_dotenv
 from scraping.web_scraping import WebScraping
-from libs.canva import Canva
+from libs.canva import Canva, imgs_folder
 from libs.images import crop_image
 from libs.ad_generator import AdGenerator
 from selenium.webdriver.common.keys import Keys
@@ -38,7 +38,8 @@ class PinterestBot(WebScraping):
         super().__init__(
             headless=HEADLESS,
             chrome_folder=CHROME_FOLDER,
-            start_killing=True
+            start_killing=True,
+            download_folder=imgs_folder
         )
         
         # Connect to canva
