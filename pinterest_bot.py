@@ -1,6 +1,7 @@
 import os
 from time import sleep
 from logs import logger
+from datetime import datetime
 from dotenv import load_dotenv
 from scraping.web_scraping import WebScraping
 from libs.canva import Canva
@@ -80,6 +81,10 @@ class PinterestBot(WebScraping):
             "new_board_btn": '[aria-label="Popover"] [role="button"]',
             "crate_board_btn": '[aria-label="Board form"] button',
         }
+        
+        # Add current date to board
+        today = datetime.now().strftime("%Y-%m-%d")
+        board += f" {today}"
 
         # Show board options
         self.click(selectors["display_btn"])
