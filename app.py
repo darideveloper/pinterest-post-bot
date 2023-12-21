@@ -53,10 +53,6 @@ def create_posts(post_data: list):
         max_post = len(post_data)
         logger.info(f"Posting {index} / {max_post}")
         
-        if "title" not in post:
-            logger.info("\tpage ad, skiping...")
-            continue
-        
         _, description = get_tags_description(
             post["keyword"],
             post["title"],
