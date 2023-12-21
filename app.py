@@ -53,7 +53,7 @@ def create_posts(post_data: list):
         max_post = len(post_data)
         logger.info(f"Posting {index} / {max_post}")
         
-        _, description = get_tags_description(
+        description = get_tags_description(
             post["keyword"],
             post["title"],
             post["price"],

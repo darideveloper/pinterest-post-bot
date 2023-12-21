@@ -1,5 +1,4 @@
 import os
-import json
 from openai import OpenAI
 from dotenv import load_dotenv
 load_dotenv()
@@ -23,7 +22,7 @@ def get_tags_description(keyword: str, title: str, price: float, rate_number: in
         store_url (str): Seller URL
         
     Returns:
-        tuple: (description: str, tags: list)
+        str: chatgpt description
     """
 
     client = OpenAI(
@@ -62,11 +61,7 @@ def get_tags_description(keyword: str, title: str, price: float, rate_number: in
                 2.- Once the elements of point "1.-" have been determined, make a description in the English language of the USA, optimized for SEO, of no less than 400 and no more than 500 characters, in a colloquial and at the same time persuasive tone that induces the viewer of the pin to click on the link either to review the comparison or to purchase the item. Integrate as many related keywords into this description as the syntax allows without losing coherence. After the description, in a continuous paragraph paste all the between 3 and 7 hashtags one after the other, only separated by a space. Take as long as necessary.
                 3.- Only present to me the elements of point "2.-".
                     
-                Be sure that the response description including tags is not longer than 500 characters
-                
-                Return the respnse in json with the keys: "keywords", and "description". Be sure to don't add the keyword to the description.
-                
-                Be sure to only use BMP characters in the response
+                Be sure that the response description including tags is not longer than 500 characters, only use BMP characters in the response and use the following format: Description: [description] [tags]
                 """
             }
         ],
@@ -76,9 +71,12 @@ def get_tags_description(keyword: str, title: str, price: float, rate_number: in
     # Get chatgpt response
     content = chat_completion.choices[0].message.content
     
+    # Get only text
+    content = content.split("Description: ")[1]
+    
     # Return response as dict
-    json_data = json.loads(content)
-    return json_data["keywords"], json_data["description"]
+    return content
+
 
 if __name__ == "__main__":
     get_tags_description("iphone", "iphone 12", 1000, 5, 100, "Amazon", True, "https://www.apple.com/")
