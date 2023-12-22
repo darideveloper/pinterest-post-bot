@@ -47,7 +47,27 @@ def create_posts(post_data: list):
         price_4,
     )
     
+    post_ordinals = {
+        2: "2nd",
+        3: "3rd",
+        21: "21st",
+        22: "22nd",
+        23: "23rd",
+        31: "31st",
+        32: "32nd",
+        33: "33rd",
+    }
+    
     for post in post_data:
+        
+        # Get post prefix
+        post_id = post_data.index(post) + 1
+        if post_id == 1:
+            prefix = "Cheaper"
+        elif post_id in post_ordinals.keys():
+            prefix = post_ordinals[post_id]
+        else:
+            prefix = str(post_id) + "th"
         
         index = post_data.index(post) + 1
         max_post = len(post_data)
@@ -86,11 +106,13 @@ def create_posts(post_data: list):
         
         # create post
         bot.post(
-            image_path,
-            title,
-            description,
-            link,
-            board,
+            image=image_path,
+            title=title,
+            description=description,
+            link=link,
+            board=board,
+            price=post["price"],
+            prefix=prefix
         )
         
         # Wait before next post
@@ -147,7 +169,8 @@ def ad_1():
     # Get GET params
     product_name = request.args.get("product-name")
     product_image = request.args.get("product-image")
-    product_price_1 = request.args.get("product-price-1")
+    product_price = request.args.get("product-price")
+    product_price_prefix = request.args.get("product-price-prefix")
     product_price_2 = request.args.get("product-price-2")
     product_price_3 = request.args.get("product-price-3")
     product_price_4 = request.args.get("product-price-4")
@@ -159,7 +182,8 @@ def ad_1():
         ad_num=1,
         product_name=product_name,
         product_image=product_image,
-        product_price_1=product_price_1,
+        product_price=product_price,
+        product_price_prefix=product_price_prefix,
         product_price_2=product_price_2,
         product_price_3=product_price_3,
         product_price_4=product_price_4,

@@ -138,7 +138,8 @@ class PinterestBot(WebScraping):
                 logger.error(f"\tERROR: Tag '{tag}' not found")
             self.refresh_selenium()
 
-    def post(self, image: str, title: str, description: str, link: str, board: str):
+    def post(self, image: str, title: str, description: str, link: str,
+             board: str, price: float, prefix: str):
         """ Create a post in pinterest
 
         Args:
@@ -147,7 +148,8 @@ class PinterestBot(WebScraping):
             description (str): Description of post
             link (str): Link to post
             board (str): Name of board
-            tags (list): List of tags
+            price (float): Price of product
+            prefix (str): Prefix of price (like Cheaper or 2nd)
         """
         
         # crop image
@@ -172,7 +174,8 @@ class PinterestBot(WebScraping):
         if AD_ID == 1:
             ad_data["product_name"] = title
             ad_data["product_image"] = image_image_path
-            ad_data["product_price_1"] = self.price_1
+            ad_data["product_price_prefix"] = prefix
+            ad_data["product_price"] = price
             ad_data["product_price_2"] = self.price_2
             ad_data["product_price_3"] = self.price_3
             ad_data["product_price_4"] = self.price_4
@@ -181,7 +184,7 @@ class PinterestBot(WebScraping):
         logger.info("\tcreating ad...")
         ad_image = self.ad_generator.create_ad_1(AD_ID, ad_data)
         crop_image(ad_image)
-        
+                
         # Validate login
         self.__login__()
 

@@ -8,9 +8,14 @@
     <p class="title">{{product_name}}</p>
   </div>
 
-  <div class="price">
-    US ${{product_price_1}}
-  </div>
+  <p class="price">
+    <span class="prefix">
+      {{product_price_prefix}}
+    </span>
+    <span class="amount">
+      US ${{product_price}}
+    </span>
+  </p>
 
   <div class="product-image-wrapper">
     <img class="product-image" src="{{ url_for('static', filename=product_image) }}" alt="">

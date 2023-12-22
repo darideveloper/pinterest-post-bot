@@ -23,10 +23,11 @@ class AdGenerator ():
                 add 1:
                     product_name (str): Name of product
                     product_image (str): Image of product
-                    product_price_1 (str): Price of product
-                    product_price_2 (str): Price of product
-                    product_price_3 (str): Price of product
-                    product_price_4 (str): Price of product
+                    product_price_prefix (str): Prefix of price (like Cheaper or 2nd)
+                    product_price (float): Price of product
+                    product_price_2 (float): Price of product
+                    product_price_3 (float): Price of product
+                    product_price_4 (float): Price of product
         
         Returns:
             str: Path of ad image
@@ -37,7 +38,8 @@ class AdGenerator ():
             ad_page = f"http://localhost:5001/ad-{ad_id}" \
                 f"?product-name={ad_data['product_name']}" \
                 f"&product-image={ad_data['product_image']}" \
-                f"&product-price-1={ad_data['product_price_1']}" \
+                f"&product-price-prefix={ad_data['product_price_prefix']}" \
+                f"&product-price={ad_data['product_price']}" \
                 f"&product-price-2={ad_data['product_price_2']}" \
                 f"&product-price-3={ad_data['product_price_3']}" \
                 f"&product-price-4={ad_data['product_price_4']}"
@@ -60,7 +62,8 @@ if __name__ == "__main__":
     ad_data = {
         "product_name": "Product name",
         "product_image": "https://picsum.photos/200",
-        "product_price_1": "100",
+        "product_price_prefix": "Cheaper",
+        "product_price": "100",
         "product_price_2": "200",
         "product_price_3": "300",
         "product_price_4": "400",
