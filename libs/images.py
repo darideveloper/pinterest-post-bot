@@ -10,7 +10,7 @@ parent_folder = os.path.dirname(current_folder)
 imgs_folder = os.path.join(parent_folder, 'static', 'imgs', 'temp')
 
 
-def download_image(link: str) -> str:
+def download_image(link: str, file_name:str) -> str:
     """ Download image and save in "media" folder
 
     Args:
@@ -28,10 +28,9 @@ def download_image(link: str) -> str:
         return ""
     
     # Save image
-    image_hash = secrets.token_hex(8)
     image_extension = link.split('.')[-1]
     image_extension = image_extension.split('?')[0]
-    image_path = os.path.join(imgs_folder, f'{image_hash}.{image_extension}')
+    image_path = os.path.join(imgs_folder, f'{file_name}.{image_extension}')
     with open(image_path, "wb") as file:
         for chunk in res:
             file.write(chunk)
