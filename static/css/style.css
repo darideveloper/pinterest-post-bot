@@ -68,6 +68,7 @@ p {
   height: 100%;
   width: auto;
   margin: 0 auto;
+  max-width: 90%;
 }
 .ad-1 .other-prices {
   color: #fcfbf6;
