@@ -68,12 +68,18 @@ class Canva ():
         # Upload image
         self.scraper.click_js(selectors["new_btn"])
         self.scraper.refresh_selenium()
-        self.scraper.send_data(selectors["input_image"], image_path)
+        try:
+            self.scraper.send_data(selectors["input_image"], image_path)
+        except Exception:
+            return False
         sleep(5)
-        self.scraper.refresh_selenium()
+        self.scraper.refresh_selenium(time_units=2)
         
         # Remove background
-        self.scraper.click_js(selectors["remove_bg_btn"])
+        try:
+            self.scraper.click_js(selectors["remove_bg_btn"])
+        except Exception:
+            return False
         sleep(5)
         self.scraper.refresh_selenium()
         
