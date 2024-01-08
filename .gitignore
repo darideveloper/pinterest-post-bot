@@ -2,3 +2,8 @@ media/*.*
 static/imgs/ad*/*.*
 static/imgs/*.*
 prompts/*.*
+*.jpeg
+*.jpg
+*.png
+*.gif
+*.webpp

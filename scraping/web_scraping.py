@@ -68,13 +68,18 @@ class WebScraping ():
         
         self.__web_page__ = None
 
-        # Kill chrome from CMD in donwows
+        # Kill chrome from terminal
         if start_killing:
             print("\nTry to kill chrome...")
-            command = 'taskkill /IM "chrome.exe" /F'
-            os.system(command)
+            windows = 'taskkill /IM "chrome.exe" /F'
+            linux = "pkill -9 -f chrome"
+            
+            if os.name == "nt":
+                os.system(windows)
+            else:
+                os.system(linux)
             print("Ok\n")
-
+            
         # Create and instance of the web browser
         if self.__start_openning__:
             self.__set_browser_instance__()
@@ -213,7 +218,8 @@ class WebScraping ():
         # Autoinstall driver with selenium
         if not WebScraping.service:
             WebScraping.service = Service()
-            
+          
+        # Auto download driver  
         self.driver = webdriver.Chrome(
             service=WebScraping.service,
             options=WebScraping.options
