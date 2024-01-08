@@ -96,9 +96,14 @@ class Canva ():
         if not new_image:
             return None
         
+        # Rename image
+        new_image_path = os.path.join(imgs_folder, new_image[0])
+        image_name = os.path.basename(image_path).split(".")[0]
+        image_path_renemed = os.path.join(imgs_folder, f"{image_name}.png")
+        os.rename(new_image_path, image_path_renemed)
+        
         # Return image path
-        image_path = os.path.join(imgs_folder, new_image[0])
-        return image_path
+        return image_path_renemed
     
     
 if __name__ == "__main__":

@@ -166,14 +166,14 @@ class PinterestBot(WebScraping):
             return
         
         # Fix image path for add generator
-        image_image_name = product_image.split("\\")[-1]
-        image_image_path = f"imgs/temp/{image_image_name}"
+        image_name = product_image.split("\\")[-1]
+        image_path = f"imgs/temp/{image_name}"
                 
         # Generate data for add
         ad_data = {}
         if AD_ID == 1:
             ad_data["product_name"] = title
-            ad_data["product_image"] = image_image_path
+            ad_data["product_image"] = image_path
             ad_data["product_price_prefix"] = prefix
             ad_data["product_price"] = price
             ad_data["product_price_2"] = self.price_2
@@ -228,24 +228,3 @@ class PinterestBot(WebScraping):
         self.click_js(selectors["btn_done"])
         sleep(5)
         self.refresh_selenium()
-
-
-if __name__ == "__main__":
-    current_folder = os.path.dirname(__file__)
-    media_folder = os.path.join(current_folder, "media")
-    file_path = os.path.join(media_folder, "sample.webp")
-
-    pinterest_bot = PinterestBot(
-        price_1=2999.0,
-        price_2=3999.0,
-        price_3=4999.0,
-        price_4=5999.0,
-    )
-    pinterest_bot.post(
-        file_path,
-        "test 1",
-        "sample post",
-        "https://www.pinterest.com/pin-creation-tool/",
-        "price checker 2999",
-    )
-    print()

@@ -72,9 +72,10 @@ def create_posts(post_data: list):
         index = post_data.index(post) + 1
         max_post = len(post_data)
         logger.info(f"Posting {index} / {max_post}")
+        keyword = post["keyword"]
         
         description = get_tags_description(
-            post["keyword"],
+            keyword,
             post["title"],
             post["price"],
             post["rate_num"],
@@ -86,7 +87,7 @@ def create_posts(post_data: list):
         
         # Download product image
         post_image = post["image"]
-        image_path = download_image(post_image)
+        image_path = download_image(post_image, keyword)
         
         # Generate pin/post title
         keyword = post["keyword"]

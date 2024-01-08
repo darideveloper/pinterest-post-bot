@@ -1,6 +1,5 @@
 import os
 import requests
-import secrets
 import numpy as np
 from PIL import Image
 from time import sleep
@@ -10,8 +9,8 @@ parent_folder = os.path.dirname(current_folder)
 imgs_folder = os.path.join(parent_folder, 'static', 'imgs', 'temp')
 
 
-def download_image(link: str) -> str:
-    """ Download image and save in "media" folder
+def download_image(link: str, file_name: str) -> str:
+    """ Download image and save in "static" folder
 
     Args:
         link (str): url of image
@@ -28,10 +27,9 @@ def download_image(link: str) -> str:
         return ""
     
     # Save image
-    image_hash = secrets.token_hex(8)
     image_extension = link.split('.')[-1]
     image_extension = image_extension.split('?')[0]
-    image_path = os.path.join(imgs_folder, f'{image_hash}.{image_extension}')
+    image_path = os.path.join(imgs_folder, f'{file_name}.{image_extension}')
     with open(image_path, "wb") as file:
         for chunk in res:
             file.write(chunk)
@@ -64,7 +62,8 @@ def crop_image(image_path: str):
     
     return True
 
-def delete_temp_images ():
+
+def delete_temp_images():
     """ Delete all images in temp folder
     """
     
