@@ -8,25 +8,23 @@ from libs.canva import Canva, imgs_folder
 from libs.images import crop_image
 from libs.ad_generator import AdGenerator
 from selenium.webdriver.common.keys import Keys
+from libs.images import download_image
+from libs.chatgpt import get_tags_description
+from libs.images import delete_temp_images
 
 load_dotenv()
 CHROME_FOLDER = os.getenv("CHROME_FOLDER")
 WAIT_TIME = os.getenv("WAIT_TIME")
 HEADLESS = os.getenv("HEADLESS") == "True"
 AD_ID = int(os.getenv("AD_ID"))
+USE_REFERRAL_LINK = os.environ.get('USE_REFERRAL_LINK') == "True"
+WAIT_TIME_POST = int(os.environ.get('WAIT_TIME_POST', 10))
 
 
 class PinterestBot(WebScraping):
 
-    def __init__(self, price_1: float, price_2: float, price_3: float,
-                 price_4: float):
-        """ Save general ads data
-
-        Args:
-            price_1 (float): lower price from scrape
-            price_2 (float): 2nd lower price from scrape
-            price_3 (float): 3rd lower price from scrape
-            price_4 (float): 4th lower price from scrape
+    def __init__(self):
+        """ Initialize bot
         """
         
         self.pages = {
@@ -49,10 +47,10 @@ class PinterestBot(WebScraping):
         self.ad_generator = AdGenerator(self)
         
         # Save lower prices
-        self.price_1 = price_1
-        self.price_2 = price_2
-        self.price_3 = price_3
-        self.price_4 = price_4
+        self.price_1 = 0
+        self.price_2 = 0
+        self.price_3 = 0
+        self.price_4 = 0
 
     def __login__(self):
         """ Open browser go to pinterest and validate session """
@@ -140,7 +138,7 @@ class PinterestBot(WebScraping):
 
     def post(self, image: str, title: str, description: str, link: str,
              board: str, price: float, prefix: str):
-        """ Create a post in pinterest
+        """ Create a single post in pinterest
 
         Args:
             image (str): Path to local image
@@ -229,3 +227,92 @@ class PinterestBot(WebScraping):
         self.click_js(selectors["btn_done"])
         sleep(5)
         self.refresh_selenium()
+            
+    def posts(self, post_data: list):
+        """ Create each pinterest post
+
+        Args:
+            post_data (list): List of post dicts
+        """
+        
+        # Get 4 lower prices
+        lower_prices = post_data[:4]
+        self.price_1 = lower_prices[0]["price"]
+        self.price_2 = lower_prices[1]["price"]
+        self.price_3 = lower_prices[2]["price"]
+        self.price_4 = lower_prices[3]["price"]
+        
+        post_ordinals = {
+            2: "2nd",
+            3: "3rd",
+            21: "21st",
+            22: "22nd",
+            23: "23rd",
+            31: "31st",
+            32: "32nd",
+            33: "33rd",
+        }
+        
+        for post in post_data:
+            
+            # Get post prefix
+            post_id = post_data.index(post) + 1
+            if post_id == 1:
+                prefix = "Cheaper"
+            elif post_id in post_ordinals.keys():
+                prefix = post_ordinals[post_id]
+            else:
+                prefix = str(post_id) + "th"
+            
+            # Get post data
+            index = post_data.index(post) + 1
+            max_post = len(post_data)
+            logger.info(f"Posting {index} / {max_post}")
+            keyword = post["keyword"]
+            
+            description = get_tags_description(
+                keyword,
+                post["title"],
+                post["price"],
+                post["rate_num"],
+                post["reviews"],
+                post["store"],
+                post["best_seller"],
+                post["url"],
+            )
+            
+            # Download product image
+            post_image = post["image"]
+            image_path = download_image(post_image, keyword)
+            
+            # Generate pin/post title
+            keyword = post["keyword"].upper()
+            
+            # previee page link
+            link_price_checker = post["url"].replace(
+                "http://localhost:5000",
+                "https://www.price-checker.us"
+            ).replace(
+                "http://127.0.0.1:5000",
+                "https://www.price-checker.us"
+            )
+            
+            link_price_checker += f"?product={post['title']}"
+            link_store = post["link"]
+            
+            # create post
+            self.post(
+                image=image_path,
+                title=keyword,
+                description=description,
+                link=link_store if USE_REFERRAL_LINK else link_price_checker,
+                board=keyword,
+                price=post["price"],
+                prefix=prefix
+            )
+            
+            # Wait before next post
+            sleep(WAIT_TIME_POST)
+            
+            # Delete all images in temp folder
+            delete_temp_images()
