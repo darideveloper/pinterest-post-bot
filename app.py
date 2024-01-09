@@ -69,6 +69,7 @@ def create_posts(post_data: list):
         else:
             prefix = str(post_id) + "th"
         
+        # Get post data
         index = post_data.index(post) + 1
         max_post = len(post_data)
         logger.info(f"Posting {index} / {max_post}")
@@ -82,7 +83,7 @@ def create_posts(post_data: list):
             post["reviews"],
             post["store"],
             post["best_seller"],
-            post["url"]
+            post["url"],
         )
         
         # Download product image
@@ -90,8 +91,7 @@ def create_posts(post_data: list):
         image_path = download_image(post_image, keyword)
         
         # Generate pin/post title
-        keyword = post["keyword"]
-        title = keyword.title()
+        keyword = post["keyword"].upper()
         
         # previee page link
         link = post["url"].replace(
@@ -102,16 +102,15 @@ def create_posts(post_data: list):
             "https://www.price-checker.us"
         )
         
-        # board name
-        board = title
+        link += f"?product={post['title']}"
         
         # create post
         bot.post(
             image=image_path,
-            title=title,
+            title=keyword,
             description=description,
             link=link,
-            board=board,
+            board=keyword,
             price=post["price"],
             prefix=prefix
         )
