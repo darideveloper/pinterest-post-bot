@@ -15,6 +15,7 @@ from libs.images import delete_temp_images
 load_dotenv()
 PORT = int(os.environ.get('PORT', 5001))
 WAIT_TIME_POST = int(os.environ.get('WAIT_TIME_POST', 10))
+USE_REFERRAL_LINK = os.environ.get('USE_REFERRAL_LINK') == "True"
 
 # Start flask
 app = Flask(__name__)
@@ -94,7 +95,7 @@ def create_posts(post_data: list):
         keyword = post["keyword"].upper()
         
         # previee page link
-        link = post["url"].replace(
+        link_price_checker = post["url"].replace(
             "http://localhost:5000",
             "https://www.price-checker.us"
         ).replace(
@@ -102,14 +103,15 @@ def create_posts(post_data: list):
             "https://www.price-checker.us"
         )
         
-        link += f"?product={post['title']}"
+        link_price_checker += f"?product={post['title']}"
+        link_store = post["link"]
         
         # create post
         bot.post(
             image=image_path,
             title=keyword,
             description=description,
-            link=link,
+            link=link_store if USE_REFERRAL_LINK else link_price_checker,
             board=keyword,
             price=post["price"],
             prefix=prefix

@@ -71,8 +71,8 @@ class WebScraping ():
         # Kill chrome from terminal
         if start_killing:
             print("\nTry to kill chrome...")
-            windows = 'taskkill /IM "chrome.exe" /F'
-            linux = "pkill -9 -f chrome"
+            windows = 'taskkill /IM "chrome.exe" /F > nul 2>&1'
+            linux = "pkill -9 -f chrome > /dev/null 2>&1"
             
             if os.name == "nt":
                 os.system(windows)
