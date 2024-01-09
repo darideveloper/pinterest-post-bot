@@ -100,6 +100,8 @@ class Canva ():
         new_image_path = os.path.join(imgs_folder, new_image[0])
         image_name = os.path.basename(image_path).split(".")[0]
         image_path_renemed = os.path.join(imgs_folder, f"{image_name}.png")
+        if os.path.exists(image_path_renemed):
+            os.remove(image_path_renemed)
         os.rename(new_image_path, image_path_renemed)
         
         # Return image path

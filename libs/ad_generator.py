@@ -50,8 +50,8 @@ class AdGenerator ():
         # Take screenshot
         current_folder = os.path.dirname(__file__)
         parent_folder = os.path.dirname(current_folder)
-        static_folder = os.path.join(parent_folder, "static", "imgs")
-        file_path = os.path.join(static_folder, "ad-1.png")
+        static_folder = os.path.join(parent_folder, "static", "imgs", "temp")
+        file_path = os.path.join(static_folder, ad_data["image_name"])
         self.scraper.screenshot(file_path)
         
         return file_path

@@ -179,6 +179,7 @@ class PinterestBot(WebScraping):
             ad_data["product_price_2"] = self.price_2
             ad_data["product_price_3"] = self.price_3
             ad_data["product_price_4"] = self.price_4
+            ad_data["image_name"] = image_name
         
         # Create ad
         logger.info("\tcreating ad...")
