@@ -297,7 +297,7 @@ class PinterestBot(WebScraping):
                 "https://www.price-checker.us"
             )
             
-            link_price_checker += f"?product={post['title']}"
+            link_price_checker += f"?product={keyword}"
             link_store = post["link"]
             
             # create post
