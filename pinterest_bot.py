@@ -199,10 +199,14 @@ class PinterestBot(WebScraping):
 
         # Load page
         self.set_page(self.pages["post"])
-        self.refresh_selenium()
+        self.refresh_selenium(time_units=3)
         
         # Upload image
-        self.send_data(selectors["input_image"], ad_image)
+        try:
+            self.send_data(selectors["input_image"], ad_image)
+        except Exception:
+            logger.error("\tERROR: Error uploading image (input not found), skipped...")
+            return
         self.refresh_selenium()
      
         # Detect errors uploading image
