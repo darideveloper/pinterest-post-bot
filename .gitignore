@@ -7,3 +7,4 @@ prompts/*.*
 *.png
 *.gif
 *.webpp
+*/temp/*

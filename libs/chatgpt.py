@@ -9,9 +9,9 @@ PROJECT_FOLDER = os.path.dirname(CURRENT_FOLDER)
 CHATGTP_PROMPT_FOLDER = os.path.join(PROJECT_FOLDER, "prompts")
 
 
-def get_tags_description(keyword: str, title: str, price: float, rate_number: int,
-                         reviews_number: int, store: str, best_seller: bool,
-                         store_url: str) -> tuple:
+def get_description(keyword: str, title: str, price: float, rate_number: int,
+                    reviews_number: int, store: str, best_seller: bool,
+                    store_url: str) -> tuple:
     """ Generate description and keyword for specific product
 
     Args:
@@ -26,13 +26,14 @@ def get_tags_description(keyword: str, title: str, price: float, rate_number: in
 
     Returns:
         str: chatgpt description
+        bool: True if description was generated, False otherwise
     """
 
     # Get prompt data
     prompt_path = os.path.join(CHATGTP_PROMPT_FOLDER, "pinterest.txt")
     with open(prompt_path, "r") as file:
         prompt = file.read()
-    
+
     # Replace values
     prompt_values = {
         "keyword": keyword,
@@ -66,14 +67,17 @@ def get_tags_description(keyword: str, title: str, price: float, rate_number: in
     content = chat_completion.choices[0].message.content
 
     # Get only text
-    content = content.split("Description: ")[1]
+    generated = False
+    if "Description: " in content:
+        content = content.split("Description: ")[1]
+        generated = True
 
     # Return response as dict
-    return content
+    return content, generated
 
 
 if __name__ == "__main__":
-    response = get_tags_description(
+    response = get_description(
         "iphone",
         "iphone 12",
         1000,

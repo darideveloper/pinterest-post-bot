@@ -9,7 +9,7 @@ from libs.images import crop_image
 from libs.ad_generator import AdGenerator
 from selenium.webdriver.common.keys import Keys
 from libs.images import download_image
-from libs.chatgpt import get_tags_description
+from libs.chatgpt import get_description
 from libs.images import delete_temp_images
 
 load_dotenv()
@@ -274,7 +274,7 @@ class PinterestBot(WebScraping):
             logger.info(f"Posting {index} / {max_post}")
             keyword = post["keyword"]
             
-            description = get_tags_description(
+            description, generated = get_description(
                 keyword,
                 post["title"],
                 post["price"],
@@ -284,6 +284,12 @@ class PinterestBot(WebScraping):
                 post["best_seller"],
                 post["url"],
             )
+            
+            # Catch when description is not generated
+            if not generated:
+                logger.error(f"\tERROR: Description not generated with correct format "
+                             f"({description})\nskipping post...")
+                continue
             
             # Download product image
             post_image = post["image"]
