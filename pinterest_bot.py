@@ -221,6 +221,9 @@ class PinterestBot(WebScraping):
             self.send_data(selectors["input_description"], description)
             self.send_data(selectors["link"], link)
         except Exception:
+            logger.debug(f"\ttitle: {title}")
+            logger.debug(f"\tdescription: {description}")
+            logger.debug(f"\tlink: {link}")
             logger.error("\tERROR: Error writing text data, skipped...")
             return
 
