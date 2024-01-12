@@ -11,7 +11,7 @@ CHATGTP_PROMPT_FOLDER = os.path.join(PROJECT_FOLDER, "prompts")
 
 def get_description(keyword: str, title: str, price: float, rate_number: int,
                     reviews_number: int, store: str, best_seller: bool,
-                    store_url: str) -> tuple:
+                    store_url: str) -> str:
     """ Generate description and keyword for specific product
 
     Args:
@@ -26,7 +26,6 @@ def get_description(keyword: str, title: str, price: float, rate_number: int,
 
     Returns:
         str: chatgpt description
-        bool: True if description was generated, False otherwise
     """
 
     # Get prompt data
@@ -67,13 +66,17 @@ def get_description(keyword: str, title: str, price: float, rate_number: int,
     content = chat_completion.choices[0].message.content
 
     # Get only text
-    generated = False
-    if "Description: " in content:
+    separator = "Description: "
+    if separator in content:
         content = content.split("Description: ")[1]
-        generated = True
+    else:
+        content = ""
+    
+    # Remove all emojis from text, like 💻✨
+    content = content.encode('ascii', 'ignore').decode('ascii')
 
     # Return response as dict
-    return content, generated
+    return content
 
 
 if __name__ == "__main__":

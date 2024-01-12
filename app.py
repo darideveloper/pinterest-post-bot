@@ -88,14 +88,19 @@ def ad_1():
 
 if __name__ == "__main__":
     
-    def show_start_message():
-        """ Show start message """
+    if USE_IDS_FILE:
+        logger.info(">>> WORKING WITH IDS FILE")
+    else:
+        logger.info(">>> WORKING WITH BOOM BUTTON")
+    
+        def show_start_message():
+            """ Show start message """
+            
+            sleep(3)
+            logger.info("**BOT READY TO CREATE POSTS**")
         
-        sleep(3)
-        logger.info("**BOT READY TO CREATE POSTS**")
-    
-    # Create thread for show start message
-    thread_obj = Thread(target=show_start_message)
-    thread_obj.start()
-    
-    app.run(port=PORT, debug=True)
+        # Create thread for show start message
+        thread_obj = Thread(target=show_start_message)
+        thread_obj.start()
+        
+        app.run(port=PORT)
