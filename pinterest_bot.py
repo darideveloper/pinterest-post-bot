@@ -87,7 +87,7 @@ class PinterestBot(WebScraping):
 
         # Show board options
         self.click(selectors["display_btn"])
-        self.refresh_selenium()
+        self.refresh_selenium(time_units=2)
 
         # Query board name
         self.send_data(selectors["search_bar"], board)
@@ -277,7 +277,7 @@ class PinterestBot(WebScraping):
             logger.info(f"Posting {index} / {max_post}")
             keyword = post["keyword"]
             
-            description, generated = get_description(
+            description = get_description(
                 keyword,
                 post["title"],
                 post["price"],
@@ -287,12 +287,6 @@ class PinterestBot(WebScraping):
                 post["best_seller"],
                 post["url"],
             )
-            
-            # Catch when description is not generated
-            if not generated:
-                logger.error(f"\tERROR: Description not generated with correct format "
-                             f"({description})\nskipping post...")
-                continue
             
             # Download product image
             post_image = post["image"]
