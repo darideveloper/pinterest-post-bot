@@ -69,8 +69,6 @@ def get_description(keyword: str, title: str, price: float, rate_number: int,
     separator = "Description: "
     if separator in content:
         content = content.split("Description: ")[1]
-    else:
-        content = ""
     
     # Remove all emojis from text, like 💻✨
     content = content.encode('ascii', 'ignore').decode('ascii')
