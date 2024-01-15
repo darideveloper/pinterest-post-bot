@@ -19,6 +19,7 @@ HEADLESS = os.getenv("HEADLESS") == "True"
 AD_ID = int(os.getenv("AD_ID"))
 USE_REFERRAL_LINK = os.environ.get('USE_REFERRAL_LINK') == "True"
 WAIT_TIME_POST = int(os.environ.get('WAIT_TIME_POST', 10))
+DEBUG = os.environ.get('DEBUG') == "True"
 
 
 class PinterestBot(WebScraping):
@@ -231,9 +232,12 @@ class PinterestBot(WebScraping):
         self.__select_create_board__(board)
         
         # Submit post
-        self.click_js(selectors["btn_done"])
-        sleep(5)
-        self.refresh_selenium()
+        if DEBUG:
+            logger.info("\tDEBUG: Post not submitted (DEBUG mode)")
+        else:
+            self.click_js(selectors["btn_done"])
+            sleep(5)
+            self.refresh_selenium()
             
     def posts(self, post_data: list):
         """ Create each pinterest post
