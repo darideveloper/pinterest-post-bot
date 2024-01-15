@@ -7,6 +7,7 @@ from flask_cors import CORS
 from pinterest_bot import PinterestBot
 from threading import Thread
 from logs import logger
+from libs.price_checker import get_products_data
 
 # Read settings
 load_dotenv()
@@ -20,6 +21,7 @@ CORS(app)
 # Paths
 current_folder = os.path.dirname(__file__)
 imgs_folder = os.path.join(current_folder, "static", "imgs")
+ids_file = os.path.join(current_folder, "ids.txt")
 
 # Start pinterest bot
 pinterest_bot = PinterestBot()
@@ -88,19 +90,31 @@ def ad_1():
 
 if __name__ == "__main__":
     
+    # Start app in background
+    thread_obj = Thread(target=app.run, kwargs={"port": PORT})
+    thread_obj.start()
+        
     if USE_IDS_FILE:
         logger.info(">>> WORKING WITH IDS FILE")
+        
+        # Loop ids from csv file
+        with open(ids_file, "r") as file:
+            ids = file.readlines()
+        
+        for id in ids:
+            
+            id = int(id.strip())
+            logger.info(f"\n> Posting id: {id}")
+            
+            # Get data from price checker api
+            data = get_products_data(id)
+            
+            # Run bot
+            pinterest_bot.posts(data)
+        
     else:
         logger.info(">>> WORKING WITH BOOM BUTTON")
     
-        def show_start_message():
-            """ Show start message """
-            
-            sleep(3)
-            logger.info("**BOT READY TO CREATE POSTS**")
-        
-        # Create thread for show start message
-        thread_obj = Thread(target=show_start_message)
-        thread_obj.start()
-        
-        app.run(port=PORT)
+        # Show start message
+        sleep(3)
+        logger.info("**BOT READY TO CREATE POSTS**")
