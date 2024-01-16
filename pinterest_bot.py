@@ -279,7 +279,7 @@ class PinterestBot(WebScraping):
             index = post_data.index(post) + 1
             max_post = len(post_data)
             logger.info(f"Posting {index} / {max_post}")
-            keyword = post["keyword"]
+            keyword = post["keyword"].title()
             
             description = get_description(
                 keyword,
