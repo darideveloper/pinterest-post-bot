@@ -296,9 +296,6 @@ class PinterestBot(WebScraping):
             post_image = post["image"]
             image_path = download_image(post_image, keyword)
             
-            # Generate pin/post title
-            keyword = post["keyword"]
-            
             # previee page link
             link_price_checker = post["url"].replace(
                 "http://localhost:5000",
