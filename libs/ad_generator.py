@@ -46,6 +46,7 @@ class AdGenerator ():
                 
             self.scraper.set_page(ad_page)
             self.scraper.refresh_selenium()
+            self.scraper.refresh_selenium()
             
         # Take screenshot
         current_folder = os.path.dirname(__file__)

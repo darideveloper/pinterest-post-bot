@@ -8,3 +8,4 @@ prompts/*.*
 *.gif
 *.webpp
 static/imgs/temp/*.*
+ids.txt
