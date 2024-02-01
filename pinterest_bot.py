@@ -281,16 +281,21 @@ class PinterestBot(WebScraping):
             logger.info(f"Posting {index} / {max_post}")
             keyword = post["keyword"].title()
             
-            description = get_description(
-                keyword,
-                post["title"],
-                post["price"],
-                post["rate_num"],
-                post["reviews"],
-                post["store"],
-                post["best_seller"],
-                post["url"],
-            )
+            try:
+                description = get_description(
+                    keyword,
+                    post["title"],
+                    post["price"],
+                    post["rate_num"],
+                    post["reviews"],
+                    post["store"],
+                    post["best_seller"],
+                    post["url"],
+                )
+            except Exception:
+                logger.error("\tERROR: Chatgpt error, skipping post...")
+                sleep(10)
+                continue
             
             # Download product image
             post_image = post["image"]
